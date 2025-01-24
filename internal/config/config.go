@@ -8,11 +8,11 @@ import (
 )
 
 type Config struct {
-	Host string `json:"host"`
-	Port string `json:"port"`
-	User string `json:"user"`
+	Host     string `json:"host"`
+	Port     string `json:"port"`
+	User     string `json:"user"`
 	Password string `json:"password"`
-	DBname string `json:"dbname"`
+	DBname   string `json:"dbname"`
 }
 
 func GetConfig() Config {
@@ -27,13 +27,13 @@ func GetConfig() Config {
 	return config
 }
 
-// Возмоможно правильнее было бы взять путь к конфигу из переменной окружения (как у Тулзова)
+// Возмоможно правильнее было бы взять путь к конфигу из переменной окружения (как у Тузова)
 // или как-нибудь по другому это сделать.
-// Было бы интересно посмотреть, какие есть способы 
+// Было бы интересно посмотреть, какие есть способы
 // и как лучше делать на реальных проектах, но пока не хочется усложнять
 func ReadConfig() []byte {
 	path, err := os.Getwd()
-	if err!=nil {
+	if err != nil {
 		log.Fatal("while trying to get os.Getwd(): " + err.Error())
 	}
 
@@ -41,13 +41,13 @@ func ReadConfig() []byte {
 	if index == -1 {
 		log.Fatal("current dir doesn't contain 'rest_imageboard'")
 	}
-	path = path[:index + len("rest_imageboard")]
+	path = path[:index+len("rest_imageboard")]
 	path += "/config/config.json"
 
 	data, err := os.ReadFile(path)
 	if err != nil {
-		log.Fatal("couldn't open file in " + path + " with err: " + err.Error() )
+		log.Fatal("couldn't open file in " + path + " with err: " + err.Error())
 	}
-	
+
 	return data
 }

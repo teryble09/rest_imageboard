@@ -1,0 +1,7 @@
+GET /threads
+POST /threads (only admin)
+DELETE /threads/{name} (only admin)
+
+GET /threads/{name}
+POST /threads/{name}
+DELETE /threads/{name}/{id} (only admin)
