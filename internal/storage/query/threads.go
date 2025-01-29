@@ -35,7 +35,7 @@ func DeleteThread(db *sql.DB, thr Thread) error {
 	if err != nil {
 		return err
 	}
-
+	defer stmt.Close()
 	res, err := stmt.Exec(thr.Name)
 	if err != nil {
 		return err

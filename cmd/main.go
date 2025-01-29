@@ -8,6 +8,8 @@ import (
 
 	"rest_imageboard/internal/config"
 	"rest_imageboard/internal/server/handlers/threads"
+	"rest_imageboard/internal/server/handlers/users"
+	customMiddleware "rest_imageboard/internal/server/middlewares"
 	"rest_imageboard/internal/storage/query"
 
 	"github.com/go-chi/chi/v5"
@@ -41,8 +43,14 @@ func main() {
 	r.Use(middleware.Logger)
 	r.Route("/threads", func(r chi.Router) {
 		r.Get("/", threads.Get(db))
-		r.Post("/", threads.Save(db))
-		r.Delete("/{name}", threads.Delete(db))
+		r.With(customMiddleware.CheckAuth).Post("/", threads.Save(db))
+		r.With(customMiddleware.CheckAuth).Delete("/{name}", threads.Delete(db))
 	})
-	http.ListenAndServe(":8081", r)
+
+	r.Route("/auth", func(r chi.Router) {
+		r.Post("/", users.GetTokenFromNamePassword(db))
+		r.Delete("/", users.DeleteAccount(db))
+	})
+
+	http.ListenAndServe(":8080", r)
 }

@@ -38,8 +38,7 @@ func createUsersIfNotCreated(db *sql.DB) error {
 	_, err := db.Exec(`
 		CREATE TABLE IF NOT EXISTS users(
 			name TEXT NOT NULL PRIMARY KEY,
-			password TEXT NOT NULL,
-			is_admin BOOLEAN
+			password TEXT NOT NULL
 		) 
 	`)
 	if err != nil {
@@ -52,7 +51,7 @@ func createUsersIfNotCreated(db *sql.DB) error {
 func createMessagesIfNotCreated(db *sql.DB) error {
 	_, err := db.Exec(`
 		CREATE TABLE IF NOT EXISTS messages(
-			id INTEGER PRIMARY KEY,
+			id SERIAL PRIMARY KEY,
 			author_name TEXT NOT NULL,
 			thread_name TEXT,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -60,8 +59,7 @@ func createMessagesIfNotCreated(db *sql.DB) error {
 			text TEXT,
 			image_name TEXT,
 			FOREIGN KEY (thread_name) REFERENCES threads(name) ON DELETE CASCADE,
-			FOREIGN KEY (reference_id) REFERENCES messages(id) ON DELETE SET NULL,
-			FOREIGN KEY (author_name) REFRENCES users(name) ON DELETE CASCADE
+			FOREIGN KEY (author_name) REFERENCES users(name) ON DELETE CASCADE
 		);
 		CREATE INDEX IF NOT EXISTS idx_thread_name on messages(thread_name);
 	`)
